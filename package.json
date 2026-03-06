@@ -1,14 +1,14 @@
 {
-  "name": "chat-backend",
+  "name": "quantum-chat-backend",
   "version": "1.0.0",
-  "description": "Production backend for chat application",
+  "description": "Production backend for Quantum AI",
   "main": "index.js",
   "type": "module",
   "scripts": {
     "start": "node index.js"
   },
   "dependencies": {
-    "@google/genai": "latest",
+    "@google/genai": "^1.44.0",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^4.21.2"
