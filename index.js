@@ -16,9 +16,8 @@ app.use(cors({ origin: '*' }));
 // Middleware to parse incoming JSON data from the frontend
 app.use(express.json());
 
-// Initialize the official Gemini AI Client
-// It automatically detects the 'GEMINI_API_KEY' environment variable
-const ai = new GoogleGenAI({});
+// Initialize the official Gemini AI Client with your specific API key
+const ai = new GoogleGenAI({ apiKey: 'AIzaSyBZHnFeiP-wsXJFPApScHTIHtzqhzMr87Y' });
 
 // Health Check Route (Render uses this to verify your app is awake)
 app.get('/', (req, res) => {
@@ -35,7 +34,7 @@ app.post('/api/chat', async (req, res) => {
             return res.status(400).json({ error: "Message content is required." });
         }
 
-        // Securely call the Gemini 2.5 Flash-Lite model
+        // Call the Gemini 2.5 Flash-Lite model
         const response = await ai.models.generateContent({
             model: 'gemini-2.5-flash-lite',
             contents: userMessage,
