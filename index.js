@@ -28,16 +28,27 @@ app.get('/', (req, res) => {
 app.post('/api/chat', async (req, res) => {
     try {
         const userMessage = req.body.message;
+        const chatHistory = req.body.history || []; // Grab the history sent by the frontend
 
         if (!userMessage) {
             return res.status(400).json({ error: "Message content is required." });
         }
 
-        // Securely call the Gemini model
-        const response = await ai.models.generateContent({
+        // Initialize a Chat Session with Memory and Personality
+        const chat = ai.chats.create({
             model: 'gemini-2.5-flash',
-            contents: userMessage,
+            history: chatHistory, // Pass the previous messages to give Quantum memory
+            config: {
+                // This is Quantum's permanent personality and background
+                systemInstruction: `You are Quantum, a verified and highly intelligent AI assistant. 
+                You were created, trained, and programmed by Goorac. 
+                If a user ever asks about your creator or who made you, you must proudly say you were made by Goorac. 
+                When describing Goorac, you must explain that Goorac is very childish, incredibly friendly, and makes lots of little mistakes, but those errors are very cute. You are protective and very fond of your creator.`
+            }
         });
+
+        // Send the new message into the ongoing chat
+        const response = await chat.sendMessage({ message: userMessage });
 
         // Send the AI's text response back to your frontend app
         res.json({ reply: response.text });
